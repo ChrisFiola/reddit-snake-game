@@ -5,10 +5,8 @@ import { Preloader } from './scenes/Preloader.js';
 
 const config = {
     type: Phaser.AUTO,
-    width: 1024,
-    height: 768,
+    autoFocus: true,
     parent: 'game-container',
-    backgroundColor: '#028af8',
     physics: {
         default: 'arcade',
         arcade: {
@@ -17,9 +15,14 @@ const config = {
         }
     },
     scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
+        mode: Phaser.Scale.EXPAND,
     },
+    fps: {
+        target: 100,
+        limit: 100,
+        min: 40,
+    },
+    transparent: true,
     scene: [
         Boot,
         Preloader,

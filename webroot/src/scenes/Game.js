@@ -2,6 +2,17 @@ export class Game extends Phaser.Scene {
     constructor() {
         super('Game');
 
+        this.currentScore = 0;
+        this.score = 0;
+
+        // When the Devvit app sends a message with `postMessage()`, this will be triggered
+        addEventListener('message', this.#onMessage);
+
+        // This event gets called when the web view is loaded
+        addEventListener('load', () => {
+            postWebViewMessage({ type: 'webViewReady' });
+        });
+
         this.snake = [];
         this.food = {};
         this.direction = 'right';
@@ -12,10 +23,46 @@ export class Game extends Phaser.Scene {
         this.isGameOver = false;
     }
 
-    create() {
+    #onMessage = (ev) => {
+        // Reserved type for messages sent via `context.ui.webView.postMessage`
+        if (ev.data.type !== 'devvit-message') return;
+        const { message } = ev.data.data;
+    
+        switch (message.type) {
 
-        this.score = 0;
+          case 'initialData': {
+            // Load initial data
+            console.log('receiving initiating data!');
+            const { currentScore } = message.data;
+
+            this.currentHighScore = currentScore;
+            this.score = 0;
+
+            break;
+          }
+
+          case 'updateScore': {
+            console.log('receiving updated data');
+
+            const { currentScore } = message.data;
+            this.score = currentScore;
+            this.currentScore = currentScore;
+
+            console.log('setting score of ' + this.score);
+            break;
+          }
+
+          default:
+            /** to-do: @satisifes {never} */
+            const _ = message;
+            break;
+        }
+      };
+
+    create() {
         this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
+        console.log('setting score of ' + this.currentScore);
+
         this.isGameOver = false;
         this.direction = 'right';
         this.nextDirection = 'right';
@@ -168,7 +215,17 @@ export class Game extends Phaser.Scene {
             // Spawn new food if eating
             this.food.destroy();
             this.score += 1;
-            this.scoreText.setText('score: ' + this.score);
+            this.scoreText.setText('score: ' + `${this.score}`);
+
+            console.log(typeof this.score);
+
+            if (this.score > this.currentHighScore){
+
+                postWebViewMessage({ type: 'setHighScore', data: { newHighScore: this.score }});
+                console.log(typeof this.score);
+                
+            };
+
             this.spawnFood();
         }
     }
@@ -182,6 +239,8 @@ export class Game extends Phaser.Scene {
     gameOver() {
         if (this.isGameOver) return;
         this.isGameOver = true;
+        this.currentScore = 0;
+        this.score = 0;
 
         // Reset directions
         this.direction = 'right';
@@ -207,5 +266,16 @@ export class Game extends Phaser.Scene {
         this.time.delayedCall(1000, () => {
             this.scene.restart();
         });
+        this.scoreText.setText('score: ' + this.currentScore );
     }
 }
+
+/**
+ * Sends a message to the Devvit app.
+ * @arg {WebViewMessage} msg
+ * @return {void}
+ */
+function postWebViewMessage(msg) {
+    parent.postMessage(msg, '*');
+  }
+

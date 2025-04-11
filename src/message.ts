@@ -1,12 +1,13 @@
 /** Message from Devvit to the web view. */
 export type DevvitMessage =
-  | { type: 'initialData'; data: { username: string; currentCounter: number } }
-  | { type: 'updateCounter'; data: { currentCounter: number } };
+  | { type: 'initialData'; data: { currentScore: number } }
+  | { type: 'updateScore'; data: { currentScore: number } };
 
 /** Message from the web view to Devvit. */
 export type WebViewMessage =
   | { type: 'webViewReady' }
-  | { type: 'setCounter'; data: { newCounter: number } };
+  | { type: 'setScore'; data: { newScore: number } }
+  | { type: 'setHighScore'; data: { newHighScore: number } };
 
 /**
  * Web view MessageEvent listener data type. The Devvit API wraps all messages

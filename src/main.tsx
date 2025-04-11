@@ -20,9 +20,14 @@ Devvit.addCustomPostType({
     });
 
     // Load latest score from redis with `useAsync` hook
-    const [counter, setCounter] = useState(async () => {
-      const redisCount = await context.redis.get(`counter_${context.postId}`);
-      return Number(redisCount ?? 0);
+    const [score, setScore] = useState(async () => {
+      const redisScore = await context.redis.get(`score_${context.postId}`);
+      return Number(redisScore ?? 0);
+    });
+
+    const [highScore, setHighScore] = useState(async () => {
+      const redisHighScore = await context.redis.get(`highScore_${context.postId}`);
+      return Number(redisHighScore ?? 0);
     });
 
     const webView = useWebView<WebViewMessage, DevvitMessage>({
@@ -32,35 +37,46 @@ Devvit.addCustomPostType({
       // Handle messages sent from the web view
       async onMessage(message, webView) {
         switch (message.type) {
+
           case 'webViewReady':
+            console.log('sending initiating data!');
             webView.postMessage({
               type: 'initialData',
               data: {
-                username: username,
-                currentCounter: counter,
+                currentScore: highScore
               },
             });
             break;
-          case 'setCounter':
-            await context.redis.set(
-              `counter_${context.postId}`,
-              message.data.newCounter.toString()
-            );
-            setCounter(message.data.newCounter);
 
+          case 'setScore':
+            await context.redis.set(
+              `score_${context.postId}`,
+              message.data.newScore.toString()
+            );
+            setScore(message.data.newScore);
             webView.postMessage({
-              type: 'updateCounter',
+              type: 'updateScore',
               data: {
-                currentCounter: message.data.newCounter,
+                currentScore: message.data.newScore,
               },
             });
             break;
+
+            case 'setHighScore':
+              await context.redis.set(
+                `highScore_${context.postId}`,
+                message.data.newHighScore.toString()
+              );
+              setHighScore(message.data.newHighScore);
+              break;
+
           default:
             throw new Error(`Unknown message type: ${message satisfies never}`);
         }
       },
       onUnmount() {
         context.ui.showToast('Web view closed!');
+
       },
     });
 
@@ -69,22 +85,22 @@ Devvit.addCustomPostType({
       <vstack grow padding="small">
         <vstack grow alignment="middle center">
           <text size="xlarge" weight="bold">
-            Snake Game
+            Snake Game Test
           </text>
           <spacer />
           <vstack alignment="start middle">
             <hstack>
-              <text size="medium">Username:</text>
+              <text size="medium">Username: </text>
               <text size="medium" weight="bold">
                 {' '}
-                {username ?? ''}
+                { username ?? ''}
               </text>
             </hstack>
             <hstack>
-              <text size="medium">Current Score:</text>
+              <text size="medium">Current High Score: </text>
               <text size="medium" weight="bold">
                 {' '}
-                {counter ?? ''}
+                {highScore ?? ''}
               </text>
             </hstack>
           </vstack>

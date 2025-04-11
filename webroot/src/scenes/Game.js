@@ -1,8 +1,9 @@
+//import globalEventEmitter from '../web/GlobalEventEmitter.ts';
+//import { MagoText } from '../objects/MagoText.ts'
+
 export class Game extends Phaser.Scene {
     constructor() {
         super('Game');
-
-        this.currentScore = 0;
         this.score = 0;
 
         // When the Devvit app sends a message with `postMessage()`, this will be triggered
@@ -60,6 +61,9 @@ export class Game extends Phaser.Scene {
       };
 
     create() {
+        //this.score = new MagoText(this, this.scale.width / 2, 12, '0', 121).setDepth(100).setOrigin(0.5, 0)
+        this.scale.on('resize', this.resize, this)
+
         this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
         console.log('setting score of ' + this.currentScore);
 
@@ -140,6 +144,10 @@ export class Game extends Phaser.Scene {
             }
         });
     }
+
+    resize() {
+		this.score.setPosition(this.scale.width / 2, 12)
+	}
 
     update(time) {
         if (this.isGameOver) return;
@@ -239,6 +247,8 @@ export class Game extends Phaser.Scene {
     gameOver() {
         if (this.isGameOver) return;
         this.isGameOver = true;
+        postWebViewMessage({ type: 'saveStats', data: { personal: this.score } });
+        //globalEventEmitter.emit('saveStats', this.score)
         this.currentScore = 0;
         this.score = 0;
 

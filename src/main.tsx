@@ -22,7 +22,9 @@ Devvit.addCustomPostType({
     const handleMessage = async (ev: PostMessageMessages, _hook: UseWebViewResult) => {
       switch (ev.type) {
         case 'saveStats': {
-          const newScore = ev.data.personal.highscore
+          console.log('receiving new score!');
+          const newScore = Number(ev.data.personal);
+          console.log('new score = ' + newScore);
           let currentPersonalStats = await redisService.getCurrentPlayerStats()
 
           if (!currentPersonalStats) {

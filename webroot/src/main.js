@@ -1,9 +1,10 @@
+//import type {Types} from 'phaser';
 import { Boot } from './scenes/Boot.js';
 import { Game } from './scenes/Game.js';
 import { GameOver } from './scenes/GameOver.js';
 import { Preloader } from './scenes/Preloader.js';
 
-const config = {
+export const config = {
     type: Phaser.AUTO,
     autoFocus: true,
     parent: 'game-container',
@@ -11,7 +12,7 @@ const config = {
         default: 'arcade',
         arcade: {
             debug: false,
-            gravity: { y: 500 }
+            gravity: { y: 500, x: 0 }
         }
     },
     scale: {
@@ -32,3 +33,4 @@ const config = {
 };
 
 new Phaser.Game(config);
+

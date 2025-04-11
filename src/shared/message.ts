@@ -1,3 +1,32 @@
+export type PostMessageMessages = SaveStatsMessage | RequestAppData
+export type SaveScoreData = {
+	highscore: number
+}
+
+export type RequestAppData = {
+	type: 'requestAppData'
+}
+
+export type SaveStatsMessage = {
+	type: 'saveStats'
+	data: {
+		personal: Pick<SaveScoreData, 'highscore'>
+	}
+}
+
+export type StartGameMessage = {
+	type: 'startGame'
+	data: {
+		personal: SaveScoreData
+	}
+}
+
+export type RedisPlayer = {
+	userId: string
+	userName: string
+	score: number
+}
+
 /** Message from Devvit to the web view. */
 export type DevvitMessage =
   | { type: 'initialData'; data: { currentScore: number } }

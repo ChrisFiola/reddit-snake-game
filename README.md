@@ -7,7 +7,6 @@ A game for reddit using:
 - Vite
 
 Current challenges:
-- Link the score to the API to implement a highscore shown on the Reddit block.
 - Arrange the file ecosystem to be easier to maintain and read.
 - Pretty up the game's UI.
 

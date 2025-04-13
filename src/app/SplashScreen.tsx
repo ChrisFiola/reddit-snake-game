@@ -43,7 +43,7 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 
 					/// Adds the title text to the splashscreen (will be on the top center of the page)
 					<text size="xlarge" weight="bold">
-						Snake Game Test 2
+						The Snake Game
 					</text>
 
 					<spacer />

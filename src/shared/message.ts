@@ -1,4 +1,5 @@
 export type PostMessageMessages = SaveStatsMessage | RequestAppData
+
 export type SaveScoreData = {
 	highscore: number
 }
@@ -10,7 +11,7 @@ export type RequestAppData = {
 export type SaveStatsMessage = {
 	type: 'saveStats'
 	data: {
-		personal: Pick<SaveScoreData, 'highscore'>
+		personal: SaveScoreData
 	}
 }
 

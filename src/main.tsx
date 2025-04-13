@@ -9,9 +9,11 @@ import './app/blocks/addMenuItem.js';
 import { RedisService } from './app/services/RedisService.js';
 import { devvitLogger } from './shared/TODOlogger.js';
 import { SplashScreen } from './app/SplashScreen.js'
-import type { DevvitMessage, WebViewMessage, PostMessageMessages } from './shared/message.js';
+import type { PostMessageMessages } from './shared/message.js';
 
-// Add a custom post type to Devvit
+/*
+* Add a custom post type to Devvit
+*/
 Devvit.addCustomPostType({
   name: 'Snake Game',
   height: 'regular',
@@ -19,46 +21,44 @@ Devvit.addCustomPostType({
 
     const redisService = new RedisService(context);
 
+    //const to handle the message sent from the webview
     const handleMessage = async (ev: PostMessageMessages, _hook: UseWebViewResult) => {
+
+      // Different case depending on the message sent from the webview
       switch (ev.type) {
+
+        // saveStats was sent from the webview
         case 'saveStats': {
-          console.log('receiving new score!');
+
+          // Stores the score received from the webview in a constant
           const newScore = Number(ev.data.personal);
-          console.log('new score = ' + newScore);
+
+          // Fetch the current player stats from redis
           let currentPersonalStats = await redisService.getCurrentPlayerStats()
 
+          // Check if the user has a score saved in redis, if not create a new one
           if (!currentPersonalStats) {
             currentPersonalStats = { highscore: 0, attempts: 0 }
-
-            if (!context.userId) return
-            try {
-              const username = (await context.reddit.getUserById(context.userId))?.username
-            } catch (e) {
-              devvitLogger.error(`Error sending user welcome job. ${e}`)
-            }
           }
 
+          // Check if the new score is greater than the current highscore
           const isNewHighScore = newScore > currentPersonalStats.highscore
+
           await redisService.saveScore({
+            // If the new score is greater than the current highscore, save it to redis
             highscore: isNewHighScore ? newScore : currentPersonalStats.highscore,
             score: newScore,
             isNewHighScore,
           })
+
+          // if the new score is greater than the current highscore, show a toast message
           if (isNewHighScore) {
             context.ui.showToast({
               text: `Saved new personal Highscore ${newScore}!`,
               appearance: 'success',
             })
           }
-          postMessage({
-            type: 'gameOver',
-            data: {
-              isNewHighScore,
-              newScore,
-              highscore: isNewHighScore ? newScore : currentPersonalStats.highscore,
-              attempts: currentPersonalStats.attempts + 1,
-            },
-          })
+
           break
         }
 
@@ -67,7 +67,9 @@ Devvit.addCustomPostType({
         }
       }
   }
-  const { mount, postMessage } = useWebView({
+
+  // This is the function that will be called when the user presses the button to start the game
+  const { mount } = useWebView({
     url: 'index.html',
     onMessage: handleMessage,
     onUnmount: () => context.ui.showToast('Thanks for playing! See you soon!'),

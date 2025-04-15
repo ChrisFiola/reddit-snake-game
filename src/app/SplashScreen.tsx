@@ -71,19 +71,6 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 							</text>
 							</hstack>
 
-     /// Highscore in horizontal stack (in second)
-							<hstack>
-							<text size="medium">TODO Current Leaderboard: </text>
-							<spacer />
-							<text size="medium" weight="bold">
-								{' Username 1 '}
-							</text>
-
-     </spacer />
-
-      {' Score 1 '}
-							</hstack>
-
 							<spacer />
 
 							/// Button in horizontal stack (in third)

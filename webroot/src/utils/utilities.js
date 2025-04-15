@@ -1,21 +1,4 @@
 /**
- * Handles keyboard input for snake movement and avoids collision with itself.
- * @return {void}
- */
-export function keyboardHandler(Game) {
-    // Handle keyboard input
-    if (Game.cursors.left.isDown && Game.direction !== 'right') {
-        Game.nextDirection = 'left';
-    } else if (Game.cursors.right.isDown && Game.direction !== 'left') {
-        Game.nextDirection = 'right';
-    } else if (Game.cursors.up.isDown && Game.direction !== 'down') {
-        Game.nextDirection = 'up';
-    } else if (Game.cursors.down.isDown && Game.direction !== 'up') {
-        Game.nextDirection = 'down';
-    }
-}   
-
-/**
  * Creates the snake with a starting position and size.
  * @return {void}
  */
@@ -44,8 +27,8 @@ export function createSnake(Game) {
  */
 export function tutorialText(Game) {
     // Create tutorial text 
-    Game.tutorialText = Game.add.text(512, 100, 'Use arrow keys or swipe to move the snake', {
-        fontFamily: 'Arial Black', fontSize: 28, color: '#ffffff',
+    Game.tutorialText = Game.add.text(Game.sys.game.canvas.width/2, Game.sys.game.canvas.height/8, 'Use arrow keys or swipe to move the snake', {
+        fontFamily: 'Arial Black', fontSize: 40, color: '#ffffff',
         stroke: '#000000', strokeThickness: 8,
         align: 'center'
     }).setOrigin(0.5);
@@ -70,8 +53,18 @@ export function tutorialText(Game) {
  * @return {void}
  */
 export function spawnFood(Game) {
-    const x = Math.floor(Math.random() * (Game.sys.game.canvas.width / Game.gridSize)) * Game.gridSize;
-    const y = Math.floor(Math.random() * (Game.sys.game.canvas.height / Game.gridSize)) * Game.gridSize;
+    // Generate random position for food
+    const xPos = (Math.floor(Math.random() * (Game.sys.game.canvas.width / Game.gridSize)) * Game.gridSize);
+    const yPos = (Math.floor(Math.random() * (Game.sys.game.canvas.height / Game.gridSize)) * Game.gridSize);
+
+    if (xPos < 60 || yPos < 60) {
+        console.log('Conflict avoided!' + ' xPos: ' + xPos + ' yPos: ' + yPos);
+    }
+    // Make sure it doesn't spawn outside the game area
+    const x = xPos < 60 ? 60 : xPos;
+    const y = yPos < 60 ? 60 : yPos;
+
+    // Generate the food rectangle
     Game.food = Game.add.rectangle(x, y, Game.gridSize - 2, Game.gridSize - 2, 0xff0000);
 }
 
@@ -116,7 +109,6 @@ export function moveSnake(Game) {
             return;
         }
     }
-
     // Check for food collision
     const eating = newX === Game.food.x && newY === Game.food.y;
 
@@ -142,44 +134,6 @@ export function moveSnake(Game) {
     }
 }
 
-/**
- * Sets up keyboard and swipe controls for the game.
- * @return {void}
- */
-export function setupControls(Game) {
-    // Setup keyboard controls
-    Game.cursors = Game.input.keyboard.createCursorKeys();
-
-    // Adding swipe gestures for mobile
-    let swipeStart = { x: 0, y: 0 };
-
-    // When touch is detected, store the starting position
-    Game.input.on('pointerdown', (pointer) => {
-        swipeStart.x = pointer.x;
-        swipeStart.y = pointer.y;
-    });
-
-    // Logic to choose the next direction based on swipe
-    Game.input.on('pointerup', (pointer) => {
-        const deltaX = pointer.x - swipeStart.x;
-        const deltaY = pointer.y - swipeStart.y;
-
-        // Check the direction of the swipe and avoid going back on itself
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            if (deltaX > 0 && Game.direction !== 'left') {
-                Game.nextDirection = 'right';
-            } else if (deltaX != 0 && Game.direction !== 'right') {
-                Game.nextDirection = 'left';
-            }
-        } else {
-            if (deltaY > 0 && Game.direction !== 'up') {
-                Game.nextDirection = 'down';
-            } else if (deltaY != 0 && Game.direction !== 'down') {
-                Game.nextDirection = 'up';
-            }
-        }
-    });
-}
 
 /**
  * Handles the game over state, resets the game, and sends the score.
@@ -205,10 +159,10 @@ export function gameOver(Game) {
     }
 
     // Show game over text
-    Game.add.text(512, 384, 'GAME OVER', {
+    Game.add.text(Game.sys.game.canvas.width/2, Game.sys.game.canvas.height/8, 'GAME OVER', {
         fontFamily: 'Arial Black',
         fontSize: 64,
-        color: '#ffffff',
+        color: '#ff0000',
         stroke: '#000000',
         strokeThickness: 8,
         align: 'center'

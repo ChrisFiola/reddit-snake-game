@@ -1,11 +1,12 @@
 import * as utils from '../utils/utilities.js';
+import * as controls from '../utils/controls.js';
 
 export class Game extends Phaser.Scene {
     constructor() {
         super('Game');
 
-        this.gridSize = 32;
-        this.snakeSpeed = 150;
+        this.gridSize = 60;
+        this.snakeSpeed = 120;
         this.lastMoveTime = 0;
 
     }
@@ -15,15 +16,20 @@ export class Game extends Phaser.Scene {
      * @return {void}
      */
     create() {
-        this.cameras.main.setZoom(1.048)
+        // Create a black rectangle for the game area
+        this.add.rectangle(this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, this.sys.game.canvas.width-48, this.sys.game.canvas.height-48, 0x000000);
+
         // Initialize game variables
         this.score = 0;
-        this.scoreText = this.add.text(30, 30, 'score: ' + this.score, { fontSize: '32px', fill: '#fff' });
         this.isGameOver = false;
         this.direction = 'right';
         this.nextDirection = 'right';
-        this.cameras.main.setBackgroundColor(0x000000);
-        this.size = this.cameras.main.width;
+
+        // Set the background color around the game area
+        this.cameras.main.setBackgroundColor(0x363535);
+        
+        // Creates the score text and sets its position and color
+        this.scoreText = this.add.text(this.sys.game.canvas.width/16, this.sys.game.canvas.height/22, 'score: ' + this.score, { fontSize: '50px', fill: '#fff' });
 
         // Create the snake and initialize its size
         utils.createSnake(this);
@@ -35,7 +41,7 @@ export class Game extends Phaser.Scene {
         utils.spawnFood(this);
 
         // Setup keyboard and swipe controls
-        utils.setupControls(this);
+        controls.setupControls(this);
     }
 
     /**
@@ -48,7 +54,7 @@ export class Game extends Phaser.Scene {
         if (this.isGameOver) return;
 
         // Handle keyboard input
-        utils.keyboardHandler(this);
+        controls.keyboardHandler(this);
 
         // Move snake at fixed intervals according to the time
         if (time >= this.lastMoveTime + this.snakeSpeed) {

@@ -6,7 +6,7 @@ export class Game extends Phaser.Scene {
         super('Game');
 
         this.gridSize = 60;
-        this.snakeSpeed = 120;
+        this.snakeSpeed = 150;
         this.lastMoveTime = 0;
 
     }

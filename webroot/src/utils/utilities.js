@@ -97,7 +97,7 @@ export function moveSnake(Game) {
     }
 
     // Check for collisions with walls
-    if (newX < 0.5 || newX >= Game.sys.game.canvas.width || newY < 0.5 || newY >= Game.sys.game.canvas.height) {
+    if (newX < 0 || newX >= Game.sys.game.canvas.width || newY < 0 || newY >= Game.sys.game.canvas.height) {
         gameOver(Game);
         return;
     }

@@ -20,10 +20,19 @@ Devvit.addCustomPostType({
   render: (context: Devvit.Context) => {
 
     const redisService = new RedisService(context);
+    
+    /*
+    ** Resets user Highscore
+    *
+    redisService.saveScore({
+      highscore: 0,
+      score: 0,
+      isNewHighScore: true
+    })*/
 
+      
     //const to handle the message sent from the webview
     const handleMessage = async (ev: PostMessageMessages, _hook: UseWebViewResult) => {
-
       // Different case depending on the message sent from the webview
       switch (ev.type) {
 
@@ -75,16 +84,23 @@ Devvit.addCustomPostType({
     onUnmount: () => context.ui.showToast('Thanks for playing! See you soon!'),
   })
 
-  const [username, usernameid] = useState(async () => {
+  const username = useState(async () => {
     return (await context.reddit.getCurrentUsername()) ?? 'anon';
   });
 
-  const [highScore, userid] = useState(async () => {
+  const highScore = useState(async () => {
     return (await redisService.getCurrentUserHighscore()) ?? 0;
   });
 
+  const topPlayer = useState(async () => {
+    return (await redisService.getCurrentCommunityHighScoreUsername()) ?? 'anon';
+  });
+  
+  const highscore = useState(async () => {
+    return (await redisService.getCurrentCommunityHighScore()) ?? 0;
+  });
 
-  return <SplashScreen context={context} onPress={mount} username={username} highScore={highScore}/>
+  return <SplashScreen context={context} onPress={mount} username={username[0]} highScore={highScore[0]} topPlayer={topPlayer[0]} topScore={Number(highscore[0])}/>
 },
 });
 

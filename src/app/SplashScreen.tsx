@@ -10,6 +10,8 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 	const { onPress } = props				// get the mount function from main.tsx
 	const username = props.username;		// Get the username from main.tsx
 	const highScore = props.highScore;		// Get the highscore from main.tsx
+	const topPlayerUser = props.topPlayer;		// Get the top player from main.tsx
+	const topPlayerScore = props.topScore;	// Get the top player score from main.tsx
 
 	return (
 
@@ -53,7 +55,7 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 
 							/// Username in horizontal stack (in first)
 							<hstack>
-								<text size="medium">Username: </text>
+								<text size="medium">Welcome : </text>
 								<spacer />
 								<text size="medium" weight="bold">
 									{' '}
@@ -63,17 +65,36 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 
 							/// Highscore in horizontal stack (in second)
 							<hstack>
-							<text size="medium">Current High Score: </text>
+							<text size="medium">Your highscore : </text>
 							<spacer />
 							<text size="medium" weight="bold">
 								{' '}
 								{ highScore.toString() ?? ''}
 							</text>
 							</hstack>
+							<spacer />
+							
+							/// Top Player in horizontal stack (in third)
+							<hstack>
+							<text size="medium">Top player in the community : </text>
+							<spacer />
+							<text size="medium" weight="bold">
+								{' '}
+								{ topPlayerUser ?? ''}
+							</text>
+							</hstack>
+							<hstack>
+							<text size="medium">With a highscore of : </text>
+							<spacer />
+							<text size="medium" weight="bold">
+							{' '}
+							{ topPlayerScore.toString() ?? ''}
+							</text>
+							</hstack>
 
 							<spacer />
 
-							/// Button in horizontal stack (in third)
+							/// Button in horizontal stack (in fourth)
 							<hstack>
 							
 								/// Adds the button to start the game
@@ -102,4 +123,6 @@ type SplashScreenProps = {
 	onPress: () => void
 	username: string
 	highScore: Number
+	topPlayer: string
+	topScore : Number
 }

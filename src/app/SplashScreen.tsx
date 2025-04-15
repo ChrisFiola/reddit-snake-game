@@ -58,7 +58,7 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 								<text size="medium"> Welcome : </text>
 								<spacer size='xsmall' />
 								<text size="medium" weight="bold">
-									{'u/'+((username) ?? '')}
+									{'u/'+((username) ?? 'Not logged in')}
 								</text>
 							</hstack>
 
@@ -67,7 +67,7 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 							<text size="medium">Your highscore : </text>
 							<spacer size='xsmall'/>
 							<text size="medium" weight="bold">
-								{ highScore.toString() ?? ''}
+								{ highScore.toString() ?? 'Not logged in'}
 							</text>
 							</hstack>
 							<spacer />

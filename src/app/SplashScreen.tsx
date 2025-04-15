@@ -31,8 +31,8 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 					url="thumbnail.jpg"
 					height="100%"
 					width="100%"
-					imageWidth={`${context.dimensions?.width ?? 670}px`}
-					imageHeight={`${context.dimensions?.height ?? 320}px`}
+					imageWidth={`${context.dimensions?.width ?? 1080}px`}
+					imageHeight={`${context.dimensions?.height ?? 1920}px`}
 					resizeMode="cover"
 				/>
 			</zstack>
@@ -55,20 +55,18 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 
 							/// Username in horizontal stack (in first)
 							<hstack>
-								<text size="medium">Welcome : </text>
-								<spacer />
+								<text size="medium"> Welcome : </text>
+								<spacer size='xsmall' />
 								<text size="medium" weight="bold">
-									{' '}
-									{ username ?? ''}
+									{'u/'+((username) ?? '')}
 								</text>
 							</hstack>
 
 							/// Highscore in horizontal stack (in second)
 							<hstack>
 							<text size="medium">Your highscore : </text>
-							<spacer />
+							<spacer size='xsmall'/>
 							<text size="medium" weight="bold">
-								{' '}
 								{ highScore.toString() ?? ''}
 							</text>
 							</hstack>
@@ -76,18 +74,16 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 							
 							/// Top Player in horizontal stack (in third)
 							<hstack>
-							<text size="medium">Top player in the community : </text>
-							<spacer />
+							<text size="medium">Top player : </text>
+							<spacer size='xsmall' />
 							<text size="medium" weight="bold">
-								{' '}
-								{ topPlayerUser ?? ''}
+								{ 'u/'+ (topPlayerUser ?? '')}
 							</text>
 							</hstack>
 							<hstack>
-							<text size="medium">With a highscore of : </text>
-							<spacer />
+							<text size="medium">Top Highscore : </text>
+							<spacer size='xsmall' />
 							<text size="medium" weight="bold">
-							{' '}
 							{ topPlayerScore.toString() ?? ''}
 							</text>
 							</hstack>
@@ -98,7 +94,7 @@ export const SplashScreen = (props: SplashScreenProps, context: Context) => {
 							<hstack>
 							
 								/// Adds the button to start the game
-								<button icon="play-fill" appearance="secondary" size="large" onPress={onPress}>
+								<button icon="play-fill" appearance="primary" size="large" onPress={onPress}>
 									PLAY GAME
 								</button>
 							</hstack>

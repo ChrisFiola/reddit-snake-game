@@ -84,18 +84,22 @@ Devvit.addCustomPostType({
     onUnmount: () => context.ui.showToast('Thanks for playing! See you soon!'),
   })
 
+  // Gets the username of the current player
   const username = useState(async () => {
     return (await context.reddit.getCurrentUsername()) ?? 'anon';
   });
 
+  // Get the highscore of the current player
   const highScore = useState(async () => {
     return (await redisService.getCurrentUserHighscore()) ?? 0;
   });
 
+  // Gets the username of the top player in the community
   const topPlayer = useState(async () => {
     return (await redisService.getCurrentCommunityHighScoreUsername()) ?? 'anon';
   });
   
+  // Get the highscore of the top player in the community
   const highscore = useState(async () => {
     return (await redisService.getCurrentCommunityHighScore()) ?? 0;
   });

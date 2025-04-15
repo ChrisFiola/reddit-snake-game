@@ -7,21 +7,20 @@ import { Preloader } from './scenes/Preloader.js';
 export const config = {
     type: Phaser.AUTO,
     autoFocus: true,
-    parent: 'game-container',
+    //parent: 'game-container',
+    backgroundColor: 'white',
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+            width: 1024,
+            height: 768,
+    },
     physics: {
         default: 'arcade',
         arcade: {
             debug: false,
             gravity: { y: 500, x: 0 }
         }
-    },
-    scale: {
-        mode: Phaser.Scale.EXPAND,
-    },
-    fps: {
-        target: 100,
-        limit: 100,
-        min: 40,
     },
     transparent: true,
     scene: [

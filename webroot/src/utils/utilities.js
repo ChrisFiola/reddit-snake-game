@@ -32,7 +32,7 @@ export function createSnake(Game) {
             startY * Game.gridSize,
             Game.gridSize - 2,
             Game.gridSize - 2,
-            0x000000
+            0xFFFFFF
         );
         Game.snake.push(segment);
     }
@@ -70,8 +70,8 @@ export function tutorialText(Game) {
  * @return {void}
  */
 export function spawnFood(Game) {
-    const x = Math.floor(Math.random() * (1024 / Game.gridSize)) * Game.gridSize;
-    const y = Math.floor(Math.random() * (768 / Game.gridSize)) * Game.gridSize;
+    const x = Math.floor(Math.random() * (Game.sys.game.canvas.width / Game.gridSize)) * Game.gridSize;
+    const y = Math.floor(Math.random() * (Game.sys.game.canvas.height / Game.gridSize)) * Game.gridSize;
     Game.food = Game.add.rectangle(x, y, Game.gridSize - 2, Game.gridSize - 2, 0xff0000);
 }
 
@@ -104,7 +104,7 @@ export function moveSnake(Game) {
     }
 
     // Check for collisions with walls
-    if (newX < 0 || newX >= 1024 || newY < 0 || newY >= 768) {
+    if (newX < 0.5 || newX >= Game.sys.game.canvas.width || newY < 0.5 || newY >= Game.sys.game.canvas.height) {
         gameOver(Game);
         return;
     }
@@ -121,7 +121,7 @@ export function moveSnake(Game) {
     const eating = newX === Game.food.x && newY === Game.food.y;
 
     // Move snake
-    const newHead = Game.add.rectangle(newX, newY, Game.gridSize - 2, Game.gridSize - 2, 0x000000);
+    const newHead = Game.add.rectangle(newX, newY, Game.gridSize - 2, Game.gridSize - 2, 0xFFFFFF);
     Game.snake.unshift(newHead);
 
     if (!eating) {

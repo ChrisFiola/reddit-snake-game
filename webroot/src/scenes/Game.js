@@ -15,15 +15,15 @@ export class Game extends Phaser.Scene {
      * @return {void}
      */
     create() {
-
+        this.cameras.main.setZoom(1.048)
         // Initialize game variables
         this.score = 0;
-        this.scoreText = this.add.text(16, 16, 'score: ' + this.score, { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(30, 30, 'score: ' + this.score, { fontSize: '32px', fill: '#fff' });
         this.isGameOver = false;
         this.direction = 'right';
         this.nextDirection = 'right';
-        this.cameras.main.setBackgroundColor(0x00ff00);
-        this.add.image(512, 384, 'background').setAlpha(0.5);
+        this.cameras.main.setBackgroundColor(0x000000);
+        this.size = this.cameras.main.width;
 
         // Create the snake and initialize its size
         utils.createSnake(this);

@@ -1,6 +1,6 @@
 import { Boot } from './scenes/Boot.js';
 import { Game } from './scenes/Game.js';
-import { GameOver } from './scenes/GameOver.js';
+import { Menu } from './scenes/Menu.js';
 import { Preloader } from './scenes/Preloader.js';
 
 export const config = {
@@ -23,8 +23,8 @@ export const config = {
     scene: [
         Boot,
         Preloader,
-        Game,
-        GameOver
+        Menu,
+        Game
     ]
 };
 
